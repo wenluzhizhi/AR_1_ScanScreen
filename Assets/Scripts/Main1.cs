@@ -36,7 +36,8 @@ public class Main1 : MonoBehaviour {
 
 		normalColorBuf=new Color32[width*height];
 
-		td = new Texture2D (width, height, TextureFormat.RGB24, false);
+		td = new Texture2D (width, height, TextureFormat.RGBA32, false);
+		maRipple.SetTexture ("_BumpMap",td);
 	}
 	
 
@@ -74,7 +75,7 @@ public class Main1 : MonoBehaviour {
 			{
 				if (j < 0 || j >= height)
 					return;
-				currentRippleStrenth [i + y * width] = strenth;
+				nextCurrentRippleSrenth [i + y * width] = strenth;
 			}
 		}
 
@@ -170,21 +171,21 @@ public class Main1 : MonoBehaviour {
 			}
 
 
-			if (i - height  >=0) {
-				bottomPoint = nextCurrentRippleSrenth [i - height];
+			if (i - width  >=0) {
+				bottomPoint = nextCurrentRippleSrenth [i - width];
 			} else {
-				bottomPoint = nextCurrentRippleSrenth [i + height];
+				bottomPoint = nextCurrentRippleSrenth [i + width];
 			}
 
-			if (i+height<nextCurrentRippleSrenth.Length) {
-				topPoint = nextCurrentRippleSrenth [i + height];
+			if (i+width<nextCurrentRippleSrenth.Length) {
+				topPoint = nextCurrentRippleSrenth [i + width];
 			} else {
-				topPoint = nextCurrentRippleSrenth [i - height];
+				topPoint = nextCurrentRippleSrenth [i - width];
 			}
 			currentRippleStrenth[i]=(leftPoint+rightPoint+topPoint+bottomPoint)*0.5f-currentRippleStrenth[i];
 
 			currentRippleStrenth [i] -= currentRippleStrenth [i]/128f;
-			if (Mathf.Abs(currentRippleStrenth [i]) <= 1) {
+			if (currentRippleStrenth [i]<= 1) {
 				currentRippleStrenth [i] = 0;
 			}
 		}
@@ -208,7 +209,7 @@ public class Main1 : MonoBehaviour {
 
 
 
-	void OnGUI(){
+	void OnGUI1(){
 		if (GUILayout.Button ("testBtn")) {
 			RippleSpread ();
 		}
